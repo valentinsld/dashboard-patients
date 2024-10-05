@@ -37,17 +37,15 @@ const search = ref("");
 const hasSearched = ref(false);
 
 const searchHandler = async () => {
-    const dataSearch = await $fetch(`/api/patients-search?s=${search.value}`)
-
-    hasSearched.value = true
-
-    listPatients.value = dataSearch
+  const dataSearch = await $fetch(`/api/patients-search?s=${search.value}`)
+  hasSearched.value = true
+  listPatients.value = dataSearch
 }
 
 const resetSearch = () => {
-    search.value = ""
-    hasSearched.value = false
-    listPatients.value = data.value.patients
+  search.value = ""
+  hasSearched.value = false
+  listPatients.value = data.value.patients
 }
 </script>
 
