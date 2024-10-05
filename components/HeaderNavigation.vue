@@ -13,7 +13,7 @@
 <style lang="scss" scoped>
 .header-navigation {
   position: sticky;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 
   display: flex;
   justify-content: space-between;
