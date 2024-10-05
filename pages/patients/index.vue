@@ -13,6 +13,7 @@ const columns = [
   { key: "heartRate", label: "Heart Rate" },
   { key: "temperature", label: "Temperature" },
   { key: "bloodPressure", label: "Blood Pressure (systolic/diastolic)" },
+  { key: "status", label: "Status" },
 ];
 
 const listPatientsRow = computed(() => {
@@ -28,6 +29,7 @@ const listPatientsRow = computed(() => {
       bloodPressure: `${patient.vitals.bloodPressure.slice().pop().systolic}/${
         patient.vitals.bloodPressure.slice().pop().diastolic
       }`,
+      status: getStatus(patient.id),
     };
   });
 });
@@ -103,6 +105,46 @@ const onUpdatePatients = patients => {
     listSockets.value.push([socketEvent, socketListener]);
   });
 }
+
+//
+// Get status of patient
+//
+const getStatus = (patientId) => {
+  const patient = listPatients.value.find((p) => p.id === patientId);
+  const lastVitals = patient.vitals;
+
+  const patientIsChild = patient.age < 18;
+  const patientIsSenior = patient.age > 65;
+
+  let status = 0
+
+  // verification heart rate
+  if (patientIsChild && (lastVitals.heartRate.slice().pop() > 120 || lastVitals.heartRate.slice().pop() < 80)) {
+    status++
+  } else if (patientIsChild && (lastVitals.heartRate.slice().pop() > 90 || lastVitals.heartRate.slice().pop() < 70)) {
+    status++
+  } else if (lastVitals.heartRate.slice().pop() > 80 || lastVitals.heartRate.slice().pop() < 60) {
+    status++
+  }
+
+  // verification bloodPressure
+  if (patientIsSenior && (lastVitals.bloodPressure.slice().pop().systolic > 170 || lastVitals.bloodPressure.slice().pop().systolic < 120)) {
+    status++
+  } else if (patientIsSenior && (lastVitals.bloodPressure.slice().pop().diastolic > 100 || lastVitals.bloodPressure.slice().pop().diastolic < 80)) {
+    status++
+  } else if (lastVitals.bloodPressure.slice().pop().systolic > 140 || lastVitals.bloodPressure.slice().pop().systolic < 120) {
+    status++
+  } else if (lastVitals.bloodPressure.slice().pop().diastolic > 80 || lastVitals.bloodPressure.slice().pop().diastolic < 60) {
+    status++
+  }
+
+  // verification temperature
+  if ((lastVitals.temperature.slice().pop() > 37.5 || lastVitals.temperature.slice().pop() < 36.3)) {
+    status++
+  }
+
+  return status;  
+}
 </script>
 
 <template>
@@ -127,6 +169,11 @@ const onUpdatePatients = patients => {
         <ULink :to="`/patients/${row.id}`">
           {{ row.name }}
         </ULink>
+      </template>
+      <template #status-data="{ row }">
+        <UBadge :color="row.status === 0 ? 'green' : row.status === 1 ? 'yellow' : 'red'">
+          {{ row.status === 0 ? 'Stable' : row.status === 1 ? 'Watch' : 'Critical' }}
+        </UBadge>
       </template>
     </UTable>
   </div>
