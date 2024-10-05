@@ -11,11 +11,6 @@ export default defineNuxtConfig({
     },
   },
 
-  ui: {
-    primary: 'blue',
-    gray: 'cool'
-  },
-  
   colorMode: {
     preference: 'light'
   }
