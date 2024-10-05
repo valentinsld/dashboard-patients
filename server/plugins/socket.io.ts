@@ -7,6 +7,11 @@ import DATA from '../api/data'
 
 const DELAY_PATIENT_UPDATE = 6000; // 6 seconds
 
+function randomInt(min: number, max: number, around: number = 0) {
+  const random = Math.floor(Math.random() * (max - min + 1) + min);
+  return random.toFixed(around);
+}
+
 export default defineNitroPlugin((nitroApp: NitroApp) => {
   const engine = new Engine();
   const io = new Server();
@@ -19,7 +24,15 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
   setInterval(() => {
     DATA.patients.forEach((patient) => {
-        io.emit("patient-update-"+patient.id, patient);
+        io.emit("patient-update-"+patient.id, {
+          id: patient.id,
+          vitals: {
+            heartRate: randomInt(60, 120),
+            temperature: randomInt(29, 42.6, 1),
+            bloodPressure: { systolic: randomInt(120, 170), diastolic: randomInt(60, 90) },
+            oxygenSaturation: randomInt(90, 100),
+          }
+        });
     });
   }, DELAY_PATIENT_UPDATE);
 
