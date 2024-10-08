@@ -1,6 +1,15 @@
-# Nuxt 3 Minimal Starter
+# Dashboard Patients
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+
+## Informations
+
+Node version : 20.18.0
+
+UI Librarie utilisé : [NuxtUI](https://ui.nuxt.com/)
+
+Back-office en temp réel : [Socket IO](https://socket.io/how-to/use-with-nuxt)
 
 ## Setup
 
