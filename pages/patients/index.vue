@@ -76,6 +76,9 @@ onMounted(() => {
   }
 });
 
+const toast = useToast()
+const router = useRouter()
+
 const socketListener = (data) => {
   // data : {id, vitals: {heartRate, temperature, bloodPressure, oxygenSaturation}}
   const indexPatient = listPatients.value.findIndex((p) => p.id === data.id);
@@ -85,6 +88,29 @@ const socketListener = (data) => {
     for (const key in data.vitals) {
       if (data.vitals.hasOwnProperty(key)) {
         listPatients.value[indexPatient].vitals[key].push(data.vitals[key]);
+
+        // check status
+        const status = getStatus(data.id);
+
+        if (status >= 2 && process.client) {
+          const patient = listPatients.value[indexPatient];
+          console.log('Patient en danger', patient.firstName, patient.lastName)
+          toast.add({
+            id: 'info_patient_'+patient.id,
+            title: 'Patient en danger',
+            description: `Le patient ${patient.firstName} ${patient.lastName} a besoin d'une attention particulière`,
+            timeout: 5000,
+            actions: [{
+              label: 'Voir le patient',
+              click: () => {
+                toast.remove('info_patient_'+patient.id)
+
+                // go to patient page
+                router.push(`/patients/${patient.id}`)
+              }
+            }],
+          })
+        }
       }
     }
   }
