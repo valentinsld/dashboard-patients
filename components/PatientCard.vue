@@ -16,6 +16,9 @@ const updatePatient = async () => {
   loading.value = true;
 
   try {
+    // try fake loading 5s
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const d = await $fetch(`/api/patients/${props.id}`, {
       method: "POST",
       body: {
