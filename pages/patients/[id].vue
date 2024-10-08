@@ -96,54 +96,71 @@ const datasetBloodPressure = computed(() => {
 
 <template>
   <div class="patient-single">
-    <PatientCard
-      v-if="patient"
-      :id="patient.id"
-      :firstName="patient.firstName"
-      :lastName="patient.lastName"
-      :age="patient.age"
-      :medicalRecordNumber="patient.medicalRecordNumber"
-      class="patient-single__infos"
-    />
+    <!-- back button -->
+    <div class="patient-single__back">
+      <ULink to="/patients">
+        Retour à la liste des patients
+      </ULink>
+    </div>
 
-    <div class="patient-single__graphs">
-      <PatientGraph
-        v-if="patient.vitals.heartRate"
-        :datas="datasetHeartRate"
+    <div class="patient-single__content">
+      <PatientCard
+        v-if="patient"
+        :id="patient.id"
+        :firstName="patient.firstName"
+        :lastName="patient.lastName"
+        :age="patient.age"
+        :medicalRecordNumber="patient.medicalRecordNumber"
+        class="content__infos"
       />
-      <PatientGraph
-        v-if="patient.vitals.temperature"
-        :datas="datasetTemperature"
-      />
-      <PatientGraph
-        v-if="patient.vitals.oxygenSaturation"
-        :datas="datasetOxygenSaturation"
-      />
-      <PatientGraph
-        v-if="patient.vitals.bloodPressure"
-        :datas="datasetBloodPressure"
-      />
+
+      <div class="content__graphs">
+        <PatientGraph
+          v-if="patient.vitals.heartRate"
+          :datas="datasetHeartRate"
+        />
+        <PatientGraph
+          v-if="patient.vitals.temperature"
+          :datas="datasetTemperature"
+        />
+        <PatientGraph
+          v-if="patient.vitals.oxygenSaturation"
+          :datas="datasetOxygenSaturation"
+        />
+        <PatientGraph
+          v-if="patient.vitals.bloodPressure"
+          :datas="datasetBloodPressure"
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .patient-single {
-  @media (min-width: 768px) {
-    display: flex;
-    align-items: flex-start;
-    gap: 2rem;
+  &__back {
+    margin-bottom: 1rem;
+  }
 
-    &__infos {
-      flex: 1;
-    }
-
-    &__graphs {
-      flex: 2;
-
+  &__content {
+    @media (min-width: 768px) {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      align-items: flex-start;
+      gap: 2rem;
+  
+      .content {
+        &__infos {
+          flex: 1;
+        }
+    
+        &__graphs {
+          flex: 2;
+    
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+      }
     }
   }
 }
